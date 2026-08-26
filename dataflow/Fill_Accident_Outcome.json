@@ -1,5 +1,5 @@
 {
-	"name": "Fill_Road_Analysis_Tables",
+	"name": "Fill_Accident_Outcome",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -22,30 +22,13 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "AccidentDetails",
-						"type": "DatasetReference"
-					},
-					"name": "AccidentDetails"
-				},
-				{
-					"dataset": {
 						"referenceName": "AccidentOutcome",
 						"type": "DatasetReference"
 					},
 					"name": "AccidentOutcome"
-				},
-				{
-					"dataset": {
-						"referenceName": "VehicleDetails",
-						"type": "DatasetReference"
-					},
-					"name": "VehicleDetails"
 				}
 			],
 			"transformations": [
-				{
-					"name": "SelectAccidentDetails"
-				},
 				{
 					"name": "SelectAccidentOutcome"
 				},
@@ -66,9 +49,6 @@
 				},
 				{
 					"name": "FormatAccidentOutcome"
-				},
-				{
-					"name": "SelectVehicleDetails"
 				}
 			],
 			"scriptLines": [
@@ -144,24 +124,6 @@
 				"     ignoreNoFilesFound: false) ~> cleanedVehicleData",
 				"cleanedAccidnetData select(mapColumn(",
 				"          ACCIDENT_NO,",
-				"          ACCIDENT_TYPE_DESC,",
-				"          DCA_DESC,",
-				"          NO_OF_VEHICLES,",
-				"          ROAD_GEOMETRY_DESC,",
-				"          SPEED_ZONE,",
-				"          RMA,",
-				"          LIGHT_CONDITION_DESC,",
-				"          POLICE_ATTEND_DESC,",
-				"          ACCIDENT_DATETIME,",
-				"          TIME_OF_DAY_BUCKET,",
-				"          YEAR,",
-				"          MONTH,",
-				"          SEASON",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectAccidentDetails",
-				"cleanedAccidnetData select(mapColumn(",
-				"          ACCIDENT_NO,",
 				"          NO_PERSONS_KILLED,",
 				"          NO_PERSONS_INJ_2,",
 				"          NO_PERSONS_INJ_3,",
@@ -212,63 +174,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> FormatAccidentOutcome",
-				"cleanedVehicleData select(mapColumn(",
-				"          ACCIDENT_NO,",
-				"          VEHICLE_ID,",
-				"          VEHICLE_YEAR_MANUF,",
-				"          VEHICLE_DCA_CODE,",
-				"          REG_STATE,",
-				"          VEHICLE_BODY_STYLE,",
-				"          VEHICLE_MAKE,",
-				"          VEHICLE_MODEL,",
-				"          VEHICLE_TYPE,",
-				"          VEHICLE_TYPE_DESC,",
-				"          VEHICLE_WEIGHT,",
-				"          CONSTRUCTION_TYPE,",
-				"          FUEL_TYPE,",
-				"          NO_OF_WHEELS,",
-				"          NO_OF_CYLINDERS,",
-				"          SEATING_CAPACITY,",
-				"          TARE_WEIGHT,",
-				"          CARRY_CAPACITY,",
-				"          CUBIC_CAPACITY,",
-				"          TRAILER_TYPE,",
-				"          VEHICLE_COLOUR_1,",
-				"          VEHICLE_COLOUR_2,",
-				"          LAMPS,",
-				"          TRAFFIC_CONTROL,",
-				"          TRAFFIC_CONTROL_DESC,",
-				"          YEAR_QUALITY_STATUS,",
-				"          {YEAR_QUALITY STATUS}",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectVehicleDetails",
-				"SelectAccidentDetails sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     input(",
-				"          ACCIDENT_NO as string,",
-				"          ACCIDENT_DATETIME as timestamp,",
-				"          ACCIDENT_TYPE_DESC as string,",
-				"          DCA_DESC as string,",
-				"          NO_OF_VEHICLES as integer,",
-				"          ROAD_GEOMETRY_DESC as string,",
-				"          SPEED_ZONE as string,",
-				"          RMA as string,",
-				"          LIGHT_CONDITION_DESC as string,",
-				"          POLICE_ATTEND_DESC as string,",
-				"          TIME_OF_DAY_BUCKET as string,",
-				"          YEAR as integer,",
-				"          MONTH as integer,",
-				"          SEASON as string",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> AccidentDetails",
 				"FormatAccidentOutcome sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -290,41 +195,7 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> AccidentOutcome",
-				"SelectVehicleDetails sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     input(",
-				"          ACCIDENT_NO as string,",
-				"          VEHICLE_ID as string,",
-				"          VEHICLE_YEAR_MANUF as integer,",
-				"          VEHICLE_MAKE as string,",
-				"          VEHICLE_MODEL as string,",
-				"          VEHICLE_BODY_STYLE as string,",
-				"          VEHICLE_TYPE as integer,",
-				"          VEHICLE_TYPE_DESC as string,",
-				"          REG_STATE as string,",
-				"          FUEL_TYPE as string,",
-				"          CONSTRUCTION_TYPE as string,",
-				"          NO_OF_WHEELS as integer,",
-				"          NO_OF_CYLINDERS as integer,",
-				"          SEATING_CAPACITY as integer,",
-				"          TARE_WEIGHT as integer,",
-				"          VEHICLE_WEIGHT as integer,",
-				"          CARRY_CAPACITY as integer,",
-				"          CUBIC_CAPACITY as integer,",
-				"          TRAILER_TYPE as string,",
-				"          VEHICLE_COLOUR_1 as string,",
-				"          VEHICLE_COLOUR_2 as string,",
-				"          YEAR_QUALITY_STATUS as string",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> VehicleDetails"
+				"     errorHandlingOption: 'stopOnFirstError') ~> AccidentOutcome"
 			]
 		}
 	}
