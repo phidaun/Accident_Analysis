@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "AccidentAnalysisFactory"
+		},
+		"cleaneData_connectionString": {
+			"value": ""
+		},
+		"roadDataAnalysisDB_password": {
+			"value": ""
+		},
+		"roadDataAnalysisDB_properties_typeProperties_server": {
+			"value": "victoriadataanalysis.database.windows.net"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_database": {
+			"value": "roadDataAnalysis"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_userName": {
+			"value": "user"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
