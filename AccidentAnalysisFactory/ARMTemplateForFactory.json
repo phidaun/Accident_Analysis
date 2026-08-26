@@ -110,7 +110,7 @@
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "Fill_Accident_Outcome",
+								"activity": "Fill_Accident_Details",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -211,12 +211,12 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Fill_Vehicle_Crash_Involvement",
+								"referenceName": "Fill_Vehicle_Details",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
 									"cleanedVehicleData": {},
-									"VehicleCrashInvolvement": {}
+									"VehicleDetails": {}
 								}
 							},
 							"staging": {},
@@ -234,7 +234,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Fill_Vehicle_Crash_Involvement')]"
+				"[concat(variables('factoryId'), '/dataflows/Fill_Vehicle_Details')]"
 			]
 		},
 		{
@@ -1477,7 +1477,6 @@
 						"          ACCIDENT_NO,",
 						"          VEHICLE_ID,",
 						"          VEHICLE_YEAR_MANUF,",
-						"          VEHICLE_DCA_CODE,",
 						"          REG_STATE,",
 						"          VEHICLE_BODY_STYLE,",
 						"          VEHICLE_MAKE,",
@@ -1496,11 +1495,7 @@
 						"          TRAILER_TYPE,",
 						"          VEHICLE_COLOUR_1,",
 						"          VEHICLE_COLOUR_2,",
-						"          LAMPS,",
-						"          TRAFFIC_CONTROL,",
-						"          TRAFFIC_CONTROL_DESC,",
-						"          YEAR_QUALITY_STATUS,",
-						"          {YEAR_QUALITY STATUS}",
+						"          YEAR_QUALITY_STATUS",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> SelectVehicleDetails",
