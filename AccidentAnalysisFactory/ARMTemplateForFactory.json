@@ -89,12 +89,13 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Fill_Vehicle_Details",
+								"referenceName": "Fill_Accident_Outcome",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
+									"cleanedAccidnetData": {},
 									"cleanedVehicleData": {},
-									"VehicleDetails": {}
+									"AccidentOutcome": {}
 								}
 							},
 							"staging": {},
@@ -187,6 +188,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/Fill_Accident_Details')]",
+				"[concat(variables('factoryId'), '/dataflows/Fill_Accident_Outcome')]",
 				"[concat(variables('factoryId'), '/dataflows/Fill_Vehicle_Details')]",
 				"[concat(variables('factoryId'), '/dataflows/Fill_Vehicle_Crash_Involvement')]"
 			]
@@ -1539,6 +1541,181 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/cleanedVehicleData')]",
 				"[concat(variables('factoryId'), '/datasets/VehicleDetails')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Casulties_By_Year_Speedzone')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "TransformAndCreateTable",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Fill_Severe_Crashes_By_Speed_Zone",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"cleanedAccidentData": {},
+									"SevereCrashesSink": {}
+								},
+								"linkedServiceParameters": {}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Fill_Severe_Crashes_By_Speed_Zone')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Fill_Severe_Crashes_By_Speed_Zone')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "cleanedAccidentData",
+								"type": "DatasetReference"
+							},
+							"name": "cleanedAccidentData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "SeverCrashCount",
+								"type": "DatasetReference"
+							},
+							"name": "SevereCrashesSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "CleanAndCast"
+						},
+						{
+							"name": "FilterSevereCrashes"
+						},
+						{
+							"name": "CountCrashes"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ACCIDENT_NO as string,",
+						"          SPEED_ZONE as string,",
+						"          YEAR as string,",
+						"          NO_PERSONS_KILLED as string,",
+						"          NO_PERSONS_INJ_2 as string,",
+						"          SEVERITY_DESC as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> cleanedAccidentData",
+						"cleanedAccidentData derive(YEAR = toInteger(YEAR),",
+						"          NO_PERSONS_KILLED = toInteger(NO_PERSONS_KILLED),",
+						"          NO_PERSONS_INJ_2 = toInteger(NO_PERSONS_INJ_2),",
+						"          CLEANED_SPEED_ZONE = iif(in(['Not known', 'Other speed limit', 'Camping/Off-road', 'Unknown'], SPEED_ZONE) || isNull(SPEED_ZONE), 'Unknown/Other', substring(SPEED_ZONE, 1, 30))) ~> CleanAndCast",
+						"CleanAndCast filter(NO_PERSONS_KILLED > 0 || NO_PERSONS_INJ_2 > 0 || in(['Fatal accident', 'Serious injury accident'], SEVERITY_DESC)) ~> FilterSevereCrashes",
+						"FilterSevereCrashes aggregate(groupBy(SPEED_ZONE = CLEANED_SPEED_ZONE,",
+						"          ACCIDENT_YEAR = YEAR),",
+						"     FATAL_CRASH_COUNT = sum(NO_PERSONS_KILLED),",
+						"          INJURY_CRASH_COUNT = sum(NO_PERSONS_INJ_2)) ~> CountCrashes",
+						"CountCrashes sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SPEED_ZONE as string,",
+						"          ACCIDENT_YEAR as integer,",
+						"          FATAL_CRASH_COUNT as integer,",
+						"          INJURY_CRASH_COUNT as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          SPEED_ZONE,",
+						"          ACCIDENT_YEAR,",
+						"          CRASH_COUNT = FATAL_CRASH_COUNT",
+						"     )) ~> SevereCrashesSink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/cleanedAccidentData')]",
+				"[concat(variables('factoryId'), '/datasets/SeverCrashCount')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SeverCrashCount')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "roadDataAnalysisDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SPEED_ZONE",
+						"type": "varchar"
+					},
+					{
+						"name": "ACCIDENT_YEAR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FATAL_CRASH_COUNT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "INJURY_CRASH_COUNT",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Severe_Crashes_By_Speed_Zone"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/roadDataAnalysisDB')]"
 			]
 		}
 	]
