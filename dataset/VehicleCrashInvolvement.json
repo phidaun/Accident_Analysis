@@ -1,0 +1,83 @@
+{
+	"name": "VehicleCrashInvolvement",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "roadDataAnalysisDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ACCIDENT_NO",
+				"type": "varchar"
+			},
+			{
+				"name": "VEHICLE_ID",
+				"type": "char"
+			},
+			{
+				"name": "VEHICLE_DCA_CODE",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "INITIAL_DIRECTION",
+				"type": "varchar"
+			},
+			{
+				"name": "FINAL_DIRECTION",
+				"type": "varchar"
+			},
+			{
+				"name": "DRIVER_INTENT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "VEHICLE_MOVEMENT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "INITIAL_IMPACT",
+				"type": "varchar"
+			},
+			{
+				"name": "LAMPS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ROAD_SURFACE_TYPE_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "TRAFFIC_CONTROL_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "TOTAL_NO_OCCUPANTS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CAUGHT_FIRE_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "LEVEL_OF_DAMAGE_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "TOWED_AWAY_FLAG",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Vehicle_Crash_Involvement"
+		}
+	}
+}

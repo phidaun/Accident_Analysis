@@ -1,0 +1,124 @@
+{
+	"name": "Fill_Vehicle_Crash_Involvement",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "cleanedVehicleData",
+						"type": "DatasetReference"
+					},
+					"name": "cleanedVehicleData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "VehicleCrashInvolvement",
+						"type": "DatasetReference"
+					},
+					"name": "VehicleCrashInvolvement"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectCrashInvolvement"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ACCIDENT_NO as string,",
+				"          VEHICLE_ID as string,",
+				"          VEHICLE_YEAR_MANUF as string,",
+				"          VEHICLE_DCA_CODE as string,",
+				"          INITIAL_DIRECTION as string,",
+				"          ROAD_SURFACE_TYPE as string,",
+				"          ROAD_SURFACE_TYPE_DESC as string,",
+				"          REG_STATE as string,",
+				"          VEHICLE_BODY_STYLE as string,",
+				"          VEHICLE_MAKE as string,",
+				"          VEHICLE_MODEL as string,",
+				"          VEHICLE_TYPE as string,",
+				"          VEHICLE_TYPE_DESC as string,",
+				"          VEHICLE_WEIGHT as string,",
+				"          CONSTRUCTION_TYPE as string,",
+				"          FUEL_TYPE as string,",
+				"          NO_OF_WHEELS as string,",
+				"          NO_OF_CYLINDERS as string,",
+				"          SEATING_CAPACITY as string,",
+				"          TARE_WEIGHT as string,",
+				"          TOTAL_NO_OCCUPANTS as string,",
+				"          CARRY_CAPACITY as string,",
+				"          CUBIC_CAPACITY as string,",
+				"          FINAL_DIRECTION as string,",
+				"          DRIVER_INTENT as string,",
+				"          VEHICLE_MOVEMENT as string,",
+				"          TRAILER_TYPE as string,",
+				"          VEHICLE_COLOUR_1 as string,",
+				"          VEHICLE_COLOUR_2 as string,",
+				"          CAUGHT_FIRE as string,",
+				"          INITIAL_IMPACT as string,",
+				"          LAMPS as string,",
+				"          LEVEL_OF_DAMAGE as string,",
+				"          TOWED_AWAY_FLAG as string,",
+				"          TRAFFIC_CONTROL as string,",
+				"          TRAFFIC_CONTROL_DESC as string,",
+				"          YEAR_QUALITY_STATUS as string,",
+				"          {YEAR_QUALITY STATUS} as string,",
+				"          CAUGHT_FIRE_DESC as string,",
+				"          LEVEL_OF_DAMAGE_DESC as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> cleanedVehicleData",
+				"cleanedVehicleData select(mapColumn(",
+				"          ACCIDENT_NO,",
+				"          VEHICLE_ID,",
+				"          VEHICLE_DCA_CODE,",
+				"          INITIAL_DIRECTION,",
+				"          FINAL_DIRECTION,",
+				"          DRIVER_INTENT,",
+				"          VEHICLE_MOVEMENT,",
+				"          INITIAL_IMPACT,",
+				"          LAMPS,",
+				"          ROAD_SURFACE_TYPE_DESC,",
+				"          TRAFFIC_CONTROL_DESC,",
+				"          TOTAL_NO_OCCUPANTS,",
+				"          CAUGHT_FIRE_DESC,",
+				"          LEVEL_OF_DAMAGE_DESC,",
+				"          TOWED_AWAY_FLAG",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectCrashInvolvement",
+				"SelectCrashInvolvement sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ACCIDENT_NO as string,",
+				"          VEHICLE_ID as string,",
+				"          VEHICLE_DCA_CODE as integer,",
+				"          INITIAL_DIRECTION as string,",
+				"          FINAL_DIRECTION as string,",
+				"          DRIVER_INTENT as integer,",
+				"          VEHICLE_MOVEMENT as integer,",
+				"          INITIAL_IMPACT as string,",
+				"          LAMPS as integer,",
+				"          ROAD_SURFACE_TYPE_DESC as string,",
+				"          TRAFFIC_CONTROL_DESC as string,",
+				"          TOTAL_NO_OCCUPANTS as integer,",
+				"          CAUGHT_FIRE_DESC as string,",
+				"          LEVEL_OF_DAMAGE_DESC as string,",
+				"          TOWED_AWAY_FLAG as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> VehicleCrashInvolvement"
+			]
+		}
+	}
+}
