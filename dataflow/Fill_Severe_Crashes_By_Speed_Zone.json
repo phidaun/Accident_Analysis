@@ -23,9 +23,6 @@
 			],
 			"transformations": [
 				{
-					"name": "FilterSevereCrashes"
-				},
-				{
 					"name": "CountCrashes"
 				}
 			],
@@ -41,8 +38,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> cleanedAccidentData",
-				"cleanedAccidentData filter(toInteger(NO_PERSONS_KILLED) > 0 || toInteger(NO_PERSONS_INJ_2) > 0 || in(['Fatal accident', 'Serious injury accident'], SEVERITY_DESC)) ~> FilterSevereCrashes",
-				"FilterSevereCrashes aggregate(groupBy(SPEED_ZONE,",
+				"cleanedAccidentData aggregate(groupBy(SPEED_ZONE,",
 				"          ACCIDENT_YEAR = YEAR),",
 				"     FATAL_CRASH_COUNT = sum(toInteger(NO_PERSONS_KILLED))",
 				",",
