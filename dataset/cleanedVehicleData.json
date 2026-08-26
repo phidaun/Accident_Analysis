@@ -1,0 +1,184 @@
+{
+	"name": "cleanedVehicleData",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "cleaneData",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "vehicle_cleaned.csv",
+				"container": "cleaneddata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ACCIDENT_NO",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_ID",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_YEAR_MANUF",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_DCA_CODE",
+				"type": "String"
+			},
+			{
+				"name": "INITIAL_DIRECTION",
+				"type": "String"
+			},
+			{
+				"name": "ROAD_SURFACE_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "ROAD_SURFACE_TYPE_DESC",
+				"type": "String"
+			},
+			{
+				"name": "REG_STATE",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_BODY_STYLE",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_MAKE",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_MODEL",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_TYPE_DESC",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_WEIGHT",
+				"type": "String"
+			},
+			{
+				"name": "CONSTRUCTION_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "FUEL_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "NO_OF_WHEELS",
+				"type": "String"
+			},
+			{
+				"name": "NO_OF_CYLINDERS",
+				"type": "String"
+			},
+			{
+				"name": "SEATING_CAPACITY",
+				"type": "String"
+			},
+			{
+				"name": "TARE_WEIGHT",
+				"type": "String"
+			},
+			{
+				"name": "TOTAL_NO_OCCUPANTS",
+				"type": "String"
+			},
+			{
+				"name": "CARRY_CAPACITY",
+				"type": "String"
+			},
+			{
+				"name": "CUBIC_CAPACITY",
+				"type": "String"
+			},
+			{
+				"name": "FINAL_DIRECTION",
+				"type": "String"
+			},
+			{
+				"name": "DRIVER_INTENT",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_MOVEMENT",
+				"type": "String"
+			},
+			{
+				"name": "TRAILER_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_COLOUR_1",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_COLOUR_2",
+				"type": "String"
+			},
+			{
+				"name": "CAUGHT_FIRE",
+				"type": "String"
+			},
+			{
+				"name": "INITIAL_IMPACT",
+				"type": "String"
+			},
+			{
+				"name": "LAMPS",
+				"type": "String"
+			},
+			{
+				"name": "LEVEL_OF_DAMAGE",
+				"type": "String"
+			},
+			{
+				"name": "TOWED_AWAY_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "TRAFFIC_CONTROL",
+				"type": "String"
+			},
+			{
+				"name": "TRAFFIC_CONTROL_DESC",
+				"type": "String"
+			},
+			{
+				"name": "YEAR_QUALITY_STATUS",
+				"type": "String"
+			},
+			{
+				"name": "YEAR_QUALITY STATUS",
+				"type": "String"
+			},
+			{
+				"name": "CAUGHT_FIRE_DESC",
+				"type": "String"
+			},
+			{
+				"name": "LEVEL_OF_DAMAGE_DESC",
+				"type": "String"
+			}
+		]
+	}
+}

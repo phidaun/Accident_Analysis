@@ -1,0 +1,78 @@
+{
+	"name": "AccidentDetails",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "roadDataAnalysisDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ACCIDENT_NO",
+				"type": "varchar"
+			},
+			{
+				"name": "ACCIDENT_DATETIME",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ACCIDENT_TYPE_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "DCA_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "NO_OF_VEHICLES",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ROAD_GEOMETRY_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "SPEED_ZONE",
+				"type": "varchar"
+			},
+			{
+				"name": "RMA",
+				"type": "varchar"
+			},
+			{
+				"name": "LIGHT_CONDITION_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "POLICE_ATTEND_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "TIME_OF_DAY_BUCKET",
+				"type": "varchar"
+			},
+			{
+				"name": "YEAR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MONTH",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SEASON",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Accident_Details"
+		}
+	}
+}

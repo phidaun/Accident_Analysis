@@ -1,0 +1,64 @@
+{
+	"name": "AccidentOutcome",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "roadDataAnalysisDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ACCIDENT_NO",
+				"type": "varchar"
+			},
+			{
+				"name": "NO_PERSONS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NO_PERSONS_KILLED",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NO_PERSONS_INJ_2",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NO_PERSONS_INJ_3",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NO_PERSONS_NOT_INJ",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SEVERITY_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "NO_VEHICLES_TOWED",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NO_VEHICLES_CAUGHT_FIRE",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MAX_DAMAGE_LEVEL_DESC",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Accident_Outcome_Summary"
+		}
+	}
+}

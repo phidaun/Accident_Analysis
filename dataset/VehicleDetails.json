@@ -1,0 +1,114 @@
+{
+	"name": "VehicleDetails",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "roadDataAnalysisDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ACCIDENT_NO",
+				"type": "varchar"
+			},
+			{
+				"name": "VEHICLE_ID",
+				"type": "char"
+			},
+			{
+				"name": "VEHICLE_YEAR_MANUF",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "VEHICLE_MAKE",
+				"type": "varchar"
+			},
+			{
+				"name": "VEHICLE_MODEL",
+				"type": "varchar"
+			},
+			{
+				"name": "VEHICLE_BODY_STYLE",
+				"type": "varchar"
+			},
+			{
+				"name": "VEHICLE_TYPE",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "VEHICLE_TYPE_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "REG_STATE",
+				"type": "varchar"
+			},
+			{
+				"name": "FUEL_TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "CONSTRUCTION_TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "NO_OF_WHEELS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NO_OF_CYLINDERS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SEATING_CAPACITY",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TARE_WEIGHT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "VEHICLE_WEIGHT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CARRY_CAPACITY",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CUBIC_CAPACITY",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TRAILER_TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "VEHICLE_COLOUR_1",
+				"type": "varchar"
+			},
+			{
+				"name": "VEHICLE_COLOUR_2",
+				"type": "varchar"
+			},
+			{
+				"name": "YEAR_QUALITY_STATUS",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Vehicle_Characteristics"
+		}
+	}
+}
