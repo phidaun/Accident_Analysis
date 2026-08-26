@@ -1,0 +1,36 @@
+{
+	"name": "SeverCrashCount",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "roadDataAnalysisDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "SPEED_ZONE",
+				"type": "varchar"
+			},
+			{
+				"name": "ACCIDENT_YEAR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FATAL_CRASH_COUNT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "INJURY_CRASH_COUNT",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Severe_Crashes_By_Speed_Zone"
+		}
+	}
+}

@@ -1,0 +1,81 @@
+{
+	"name": "Fill_Severe_Crashes_By_Speed_Zone",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "cleanedAccidentData",
+						"type": "DatasetReference"
+					},
+					"name": "cleanedAccidentData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SeverCrashCount",
+						"type": "DatasetReference"
+					},
+					"name": "SevereCrashesSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "CleanAndCast"
+				},
+				{
+					"name": "FilterSevereCrashes"
+				},
+				{
+					"name": "CountCrashes"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ACCIDENT_NO as string,",
+				"          SPEED_ZONE as string,",
+				"          YEAR as string,",
+				"          NO_PERSONS_KILLED as string,",
+				"          NO_PERSONS_INJ_2 as string,",
+				"          SEVERITY_DESC as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> cleanedAccidentData",
+				"cleanedAccidentData derive(YEAR = toInteger(YEAR),",
+				"          NO_PERSONS_KILLED = toInteger(NO_PERSONS_KILLED),",
+				"          NO_PERSONS_INJ_2 = toInteger(NO_PERSONS_INJ_2),",
+				"          CLEANED_SPEED_ZONE = iif(in(['Not known', 'Other speed limit', 'Camping/Off-road', 'Unknown'], SPEED_ZONE) || isNull(SPEED_ZONE), 'Unknown/Other', substring(SPEED_ZONE, 1, 30))) ~> CleanAndCast",
+				"CleanAndCast filter(NO_PERSONS_KILLED > 0 || NO_PERSONS_INJ_2 > 0 || in(['Fatal accident', 'Serious injury accident'], SEVERITY_DESC)) ~> FilterSevereCrashes",
+				"FilterSevereCrashes aggregate(groupBy(SPEED_ZONE = CLEANED_SPEED_ZONE,",
+				"          ACCIDENT_YEAR = YEAR),",
+				"     FATAL_CRASH_COUNT = sum(NO_PERSONS_KILLED),",
+				"          INJURY_CRASH_COUNT = sum(NO_PERSONS_INJ_2)) ~> CountCrashes",
+				"CountCrashes sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SPEED_ZONE as string,",
+				"          ACCIDENT_YEAR as integer,",
+				"          FATAL_CRASH_COUNT as integer,",
+				"          INJURY_CRASH_COUNT as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          SPEED_ZONE,",
+				"          ACCIDENT_YEAR,",
+				"          CRASH_COUNT = FATAL_CRASH_COUNT",
+				"     )) ~> SevereCrashesSink"
+			]
+		}
+	}
+}
