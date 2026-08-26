@@ -1,0 +1,15 @@
+{
+	"name": "AccidentAnalysisFactory",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "australiaeast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3bcc4c30-d3cb-47f4-9204-abb3887bd68a",
+		"tenantId": "dc0b52a3-68c5-44f7-881d-9383d8850b96"
+	}
+}
