@@ -41,7 +41,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> cleanedAccidentData",
-				"cleanedAccidentData filter(toFloat(NO_PERSONS_KILLED) > 0 || toFloat(NO_PERSONS_INJ_2) > 0 || in(['Fatal accident', 'Serious injury accident'], SEVERITY_DESC)) ~> FilterSevereCrashes",
+				"cleanedAccidentData filter(toInteger(NO_PERSONS_KILLED) > 0 || toInteger(NO_PERSONS_INJ_2) > 0 || in(['Fatal accident', 'Serious injury accident'], SEVERITY_DESC)) ~> FilterSevereCrashes",
 				"FilterSevereCrashes aggregate(groupBy(SPEED_ZONE,",
 				"          ACCIDENT_YEAR = YEAR),",
 				"     FATAL_CRASH_COUNT = sum(toInteger(NO_PERSONS_KILLED))",
