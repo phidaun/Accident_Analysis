@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Fill_Vehicle_Crash_Involvement",
+						"referenceName": "Fill_Vehicle_Details",
 						"type": "DataFlowReference"
 					},
 					"compute": {
