@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Fill_roadAnalysis_Data",
+				"name": "Fill_Accident_Details",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,69 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Fill_Road_Analysis_Tables",
+						"referenceName": "Fill_Accident_Details",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Fill_Accident_Outcome",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Fill_Accident_Details",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "Fill_Vehicle_Details",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Fill_Vehicle_Details",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Fill_Accident_Outcome",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "Fill_Vehicle_Details",
 						"type": "DataFlowReference"
 					},
 					"compute": {
