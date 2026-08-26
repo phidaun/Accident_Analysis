@@ -47,7 +47,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Fill_Vehicle_Details",
+						"referenceName": "Fill_Accident_Outcome",
 						"type": "DataFlowReference"
 					},
 					"compute": {
