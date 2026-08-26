@@ -87,6 +87,37 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Fill_Vehicle_Outcomes",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Fill_Vehicle_Details",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "Fill_Vehicle_Crash_Involvement",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"annotations": []
