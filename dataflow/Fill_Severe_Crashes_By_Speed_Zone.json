@@ -40,9 +40,7 @@
 				"     ignoreNoFilesFound: false) ~> cleanedAccidentData",
 				"cleanedAccidentData aggregate(groupBy(SPEED_ZONE,",
 				"          ACCIDENT_YEAR = YEAR),",
-				"     FATAL_CRASH_COUNT = sum(toInteger(NO_PERSONS_KILLED))",
-				",",
-				"          INJURY_CRASH_COUNT = sum(toInteger(NO_PERSONS_INJ_2))) ~> CountCrashes",
+				"     CRASH_COUNT = countIf(toInteger(NO_PERSONS_KILLED) > 0 || toInteger(NO_PERSONS_INJ_2) > 0)) ~> CountCrashes",
 				"CountCrashes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -63,7 +61,7 @@
 				"     mapColumn(",
 				"          SPEED_ZONE,",
 				"          ACCIDENT_YEAR,",
-				"          CRASH_COUNT = FATAL_CRASH_COUNT",
+				"          CRASH_COUNT",
 				"     )) ~> SevereCrashesSink"
 			]
 		}
