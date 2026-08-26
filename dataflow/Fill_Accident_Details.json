@@ -1,0 +1,102 @@
+{
+	"name": "Fill_Accident_Details",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "cleanedAccidentData",
+						"type": "DatasetReference"
+					},
+					"name": "cleanedAccidnetData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AccidentDetails",
+						"type": "DatasetReference"
+					},
+					"name": "AccidentDetails"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectAccidentDetails"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ACCIDENT_NO as string,",
+				"          ACCIDENT_TYPE_DESC as string,",
+				"          DCA_DESC as string,",
+				"          NO_OF_VEHICLES as string,",
+				"          NO_PERSONS_KILLED as string,",
+				"          NO_PERSONS_INJ_2 as string,",
+				"          NO_PERSONS_INJ_3 as string,",
+				"          NO_PERSONS_NOT_INJ as string,",
+				"          NO_PERSONS as string,",
+				"          ROAD_GEOMETRY_DESC as string,",
+				"          SPEED_ZONE as string,",
+				"          RMA as string,",
+				"          SEVERITY_DESC as string,",
+				"          LIGHT_CONDITION_DESC as string,",
+				"          POLICE_ATTEND_DESC as string,",
+				"          ACCIDENT_DATETIME as string,",
+				"          TIME_OF_DAY_BUCKET as string,",
+				"          YEAR as string,",
+				"          MONTH as string,",
+				"          SEASON as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> cleanedAccidnetData",
+				"cleanedAccidnetData select(mapColumn(",
+				"          ACCIDENT_NO,",
+				"          ACCIDENT_TYPE_DESC,",
+				"          DCA_DESC,",
+				"          NO_OF_VEHICLES,",
+				"          ROAD_GEOMETRY_DESC,",
+				"          SPEED_ZONE,",
+				"          RMA,",
+				"          LIGHT_CONDITION_DESC,",
+				"          POLICE_ATTEND_DESC,",
+				"          ACCIDENT_DATETIME,",
+				"          TIME_OF_DAY_BUCKET,",
+				"          YEAR,",
+				"          MONTH,",
+				"          SEASON",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectAccidentDetails",
+				"SelectAccidentDetails sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ACCIDENT_NO as string,",
+				"          ACCIDENT_DATETIME as timestamp,",
+				"          ACCIDENT_TYPE_DESC as string,",
+				"          DCA_DESC as string,",
+				"          NO_OF_VEHICLES as integer,",
+				"          ROAD_GEOMETRY_DESC as string,",
+				"          SPEED_ZONE as string,",
+				"          RMA as string,",
+				"          LIGHT_CONDITION_DESC as string,",
+				"          POLICE_ATTEND_DESC as string,",
+				"          TIME_OF_DAY_BUCKET as string,",
+				"          YEAR as integer,",
+				"          MONTH as integer,",
+				"          SEASON as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> AccidentDetails"
+			]
+		}
+	}
+}
