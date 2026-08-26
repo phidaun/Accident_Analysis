@@ -62,7 +62,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Fill_Accident_Outcome",
+						"activity": "Fill_Accident_Details",
 						"dependencyConditions": [
 							"Succeeded"
 						]
