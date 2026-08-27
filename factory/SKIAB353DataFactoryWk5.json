@@ -1,0 +1,15 @@
+{
+	"name": "SKIAB353DataFactoryWk5",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "australiaeast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "02623763-0358-40c7-b390-5a1eb5db1ccd",
+		"tenantId": "dc0b52a3-68c5-44f7-881d-9383d8850b96"
+	}
+}
