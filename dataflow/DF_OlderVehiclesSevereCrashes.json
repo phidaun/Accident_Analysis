@@ -44,6 +44,9 @@
 				},
 				{
 					"name": "FormatTable6Output"
+				},
+				{
+					"name": "SelectTable6Columns"
 				}
 			],
 			"scriptLines": [
@@ -154,7 +157,14 @@
 				"          VEHICLE_TYPE_DESC),",
 				"     OLDER_VEHICLE_COUNT = count()) ~> AggregateOlderVehicles",
 				"AggregateOlderVehicles derive(ACCIDENT_YEAR = toInteger(ACCIDENT_YEAR_INT),",
-				"          OLDER_VEHICLE_COUNT = toInteger(OLDER_VEHICLE_COUNT)) ~> FormatTable6Output"
+				"          OLDER_VEHICLE_COUNT = toInteger(OLDER_VEHICLE_COUNT)) ~> FormatTable6Output",
+				"FormatTable6Output select(mapColumn(",
+				"          ACCIDENT_YEAR,",
+				"          VEHICLE_TYPE_DESC,",
+				"          OLDER_VEHICLE_COUNT",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectTable6Columns"
 			]
 		}
 	}
