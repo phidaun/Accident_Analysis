@@ -1,0 +1,104 @@
+{
+	"name": "SK_AccidentCleaned",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SK_Assessment1_Blob",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "accident_cleaned.csv",
+				"container": "assessment1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ACCIDENT_NO",
+				"type": "String"
+			},
+			{
+				"name": "ACCIDENT_TYPE_DESC",
+				"type": "String"
+			},
+			{
+				"name": "DCA_DESC",
+				"type": "String"
+			},
+			{
+				"name": "NO_OF_VEHICLES",
+				"type": "String"
+			},
+			{
+				"name": "NO_PERSONS_KILLED",
+				"type": "String"
+			},
+			{
+				"name": "NO_PERSONS_INJ_2",
+				"type": "String"
+			},
+			{
+				"name": "NO_PERSONS_INJ_3",
+				"type": "String"
+			},
+			{
+				"name": "NO_PERSONS_NOT_INJ",
+				"type": "String"
+			},
+			{
+				"name": "NO_PERSONS",
+				"type": "String"
+			},
+			{
+				"name": "ROAD_GEOMETRY_DESC",
+				"type": "String"
+			},
+			{
+				"name": "SPEED_ZONE",
+				"type": "String"
+			},
+			{
+				"name": "RMA",
+				"type": "String"
+			},
+			{
+				"name": "SEVERITY_DESC",
+				"type": "String"
+			},
+			{
+				"name": "LIGHT_CONDITION_DESC",
+				"type": "String"
+			},
+			{
+				"name": "POLICE_ATTEND_DESC",
+				"type": "String"
+			},
+			{
+				"name": "ACCIDENT_DATETIME",
+				"type": "String"
+			},
+			{
+				"name": "TIME_OF_DAY_BUCKET",
+				"type": "String"
+			},
+			{
+				"name": "YEAR",
+				"type": "String"
+			},
+			{
+				"name": "MONTH",
+				"type": "String"
+			},
+			{
+				"name": "SEASON",
+				"type": "String"
+			}
+		]
+	}
+}
