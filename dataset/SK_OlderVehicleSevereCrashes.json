@@ -1,0 +1,31 @@
+{
+	"name": "SK_OlderVehicleSevereCrashes",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SK_Assessment1_SQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ACCIDENT_YEAR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "VEHICLE_TYPE_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "OLDER_VEHICLE_COUNT",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Older_Vehicles_In_Severe_Crashes"
+		}
+	}
+}
