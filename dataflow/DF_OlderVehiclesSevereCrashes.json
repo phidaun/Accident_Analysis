@@ -1,0 +1,94 @@
+{
+	"name": "DF_OlderVehiclesSevereCrashes",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SK_AccidentCleaned",
+						"type": "DatasetReference"
+					},
+					"name": "AccidentSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "SK_VehicleCleaned",
+						"type": "DatasetReference"
+					},
+					"name": "VehicleSource"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          ACCIDENT_NO as string,",
+				"          ACCIDENT_TYPE_DESC as string,",
+				"          DCA_DESC as string,",
+				"          NO_OF_VEHICLES as string,",
+				"          NO_PERSONS_KILLED as string,",
+				"          NO_PERSONS_INJ_2 as string,",
+				"          NO_PERSONS_INJ_3 as string,",
+				"          NO_PERSONS_NOT_INJ as string,",
+				"          NO_PERSONS as string,",
+				"          ROAD_GEOMETRY_DESC as string,",
+				"          SPEED_ZONE as string,",
+				"          RMA as string,",
+				"          SEVERITY_DESC as string,",
+				"          LIGHT_CONDITION_DESC as string,",
+				"          POLICE_ATTEND_DESC as string,",
+				"          ACCIDENT_DATETIME as string,",
+				"          TIME_OF_DAY_BUCKET as string,",
+				"          YEAR as string,",
+				"          MONTH as string,",
+				"          SEASON as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: true,",
+				"     ignoreNoFilesFound: false) ~> AccidentSource",
+				"source(output(",
+				"          ACCIDENT_NO as string,",
+				"          VEHICLE_ID as string,",
+				"          VEHICLE_YEAR_MANUF as string,",
+				"          VEHICLE_DCA_CODE as string,",
+				"          INITIAL_DIRECTION as string,",
+				"          ROAD_SURFACE_TYPE as string,",
+				"          ROAD_SURFACE_TYPE_DESC as string,",
+				"          REG_STATE as string,",
+				"          VEHICLE_BODY_STYLE as string,",
+				"          VEHICLE_MAKE as string,",
+				"          VEHICLE_MODEL as string,",
+				"          VEHICLE_TYPE as string,",
+				"          VEHICLE_TYPE_DESC as string,",
+				"          CONSTRUCTION_TYPE as string,",
+				"          FUEL_TYPE as string,",
+				"          NO_OF_WHEELS as string,",
+				"          NO_OF_CYLINDERS as string,",
+				"          SEATING_CAPACITY as string,",
+				"          TARE_WEIGHT as string,",
+				"          TOTAL_NO_OCCUPANTS as string,",
+				"          FINAL_DIRECTION as string,",
+				"          DRIVER_INTENT as string,",
+				"          VEHICLE_MOVEMENT as string,",
+				"          TRAILER_TYPE as string,",
+				"          VEHICLE_COLOUR_1 as string,",
+				"          VEHICLE_COLOUR_2 as string,",
+				"          CAUGHT_FIRE as string,",
+				"          INITIAL_IMPACT as string,",
+				"          LAMPS as string,",
+				"          LEVEL_OF_DAMAGE as string,",
+				"          TOWED_AWAY_FLAG as string,",
+				"          TRAFFIC_CONTROL as string,",
+				"          TRAFFIC_CONTROL_DESC as string,",
+				"          YEAR_QUALITY_STATUS as string,",
+				"          CAUGHT_FIRE_DESC as string,",
+				"          LEVEL_OF_DAMAGE_DESC as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: true,",
+				"     ignoreNoFilesFound: false) ~> VehicleSource"
+			]
+		}
+	}
+}
