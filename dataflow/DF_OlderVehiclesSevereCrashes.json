@@ -20,7 +20,14 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "SelectAccidentFields"
+				},
+				{
+					"name": "SelectVehicleFields"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          ACCIDENT_NO as string,",
@@ -87,7 +94,24 @@
 				"     ),",
 				"     allowSchemaDrift: false,",
 				"     validateSchema: true,",
-				"     ignoreNoFilesFound: false) ~> VehicleSource"
+				"     ignoreNoFilesFound: false) ~> VehicleSource",
+				"AccidentSource select(mapColumn(",
+				"          ACCIDENT_NO,",
+				"          ACCIDENT_YEAR = YEAR,",
+				"          NO_PERSONS_KILLED,",
+				"          NO_PERSONS_INJ_2",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectAccidentFields",
+				"VehicleSource select(mapColumn(",
+				"          VEHICLE_ACCIDENT_NO = ACCIDENT_NO,",
+				"          VEHICLE_ID,",
+				"          VEHICLE_YEAR_MANUF,",
+				"          VEHICLE_TYPE_DESC,",
+				"          YEAR_QUALITY_STATUS",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectVehicleFields"
 			]
 		}
 	}
