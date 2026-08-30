@@ -19,7 +19,15 @@
 					"name": "VehicleSource"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SK_OlderVehicleSevereCrashes",
+						"type": "DatasetReference"
+					},
+					"name": "OlderVehicleSevereSink"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SelectAccidentFields"
@@ -164,7 +172,23 @@
 				"          OLDER_VEHICLE_COUNT",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectTable6Columns"
+				"     skipDuplicateMapOutputs: true) ~> SelectTable6Columns",
+				"SelectTable6Columns sink(allowSchemaDrift: false,",
+				"     validateSchema: true,",
+				"     input(",
+				"          ACCIDENT_YEAR as integer,",
+				"          VEHICLE_TYPE_DESC as string,",
+				"          OLDER_VEHICLE_COUNT as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> OlderVehicleSevereSink"
 			]
 		}
 	}
