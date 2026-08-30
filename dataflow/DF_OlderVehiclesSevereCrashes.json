@@ -38,6 +38,9 @@
 				},
 				{
 					"name": "FilterOlderSevereVehicles"
+				},
+				{
+					"name": "AggregateOlderVehicles"
 				}
 			],
 			"scriptLines": [
@@ -143,7 +146,10 @@
 				"&& (\r",
 				"    KILLED_COUNT_INT > 0\r",
 				"    || SERIOUS_INJURY_COUNT_INT > 0\r",
-				")) ~> FilterOlderSevereVehicles"
+				")) ~> FilterOlderSevereVehicles",
+				"FilterOlderSevereVehicles aggregate(groupBy(ACCIDENT_YEAR_INT,",
+				"          VEHICLE_TYPE_DESC),",
+				"     OLDER_VEHICLE_COUNT = count()) ~> AggregateOlderVehicles"
 			]
 		}
 	}
