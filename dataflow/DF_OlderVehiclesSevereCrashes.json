@@ -32,6 +32,9 @@
 				},
 				{
 					"name": "FilterValidManufactureYear"
+				},
+				{
+					"name": "DeriveVehicleAge"
 				}
 			],
 			"scriptLines": [
@@ -127,7 +130,12 @@
 				"&& !isNull(VEHICLE_YEAR_MANUF)\r",
 				"&& !isNull(ACCIDENT_YEAR)\r",
 				"&& toInteger(VEHICLE_YEAR_MANUF) > 0\r",
-				"&& toInteger(VEHICLE_YEAR_MANUF) <= toInteger(ACCIDENT_YEAR)) ~> FilterValidManufactureYear"
+				"&& toInteger(VEHICLE_YEAR_MANUF) <= toInteger(ACCIDENT_YEAR)) ~> FilterValidManufactureYear",
+				"FilterValidManufactureYear derive(ACCIDENT_YEAR_INT = toInteger(ACCIDENT_YEAR),",
+				"          VEHICLE_YEAR_INT = toInteger(VEHICLE_YEAR_MANUF),",
+				"          KILLED_COUNT_INT = toInteger(NO_PERSONS_KILLED),",
+				"          SERIOUS_INJURY_COUNT_INT = toInteger(NO_PERSONS_INJ_2),",
+				"          VEHICLE_AGE = toInteger(ACCIDENT_YEAR) - toInteger(VEHICLE_YEAR_MANUF)) ~> DeriveVehicleAge"
 			]
 		}
 	}
