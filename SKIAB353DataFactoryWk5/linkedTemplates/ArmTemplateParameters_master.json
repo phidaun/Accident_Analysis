@@ -1,0 +1,84 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "SKIAB353DataFactoryWk5"
+		},
+		"AzureBlobStorageSK_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase2_password": {
+			"value": ""
+		},
+		"AzureSqlDatabase3_password": {
+			"value": ""
+		},
+		"AzureSqlDatabaseLinkedService_password": {
+			"value": ""
+		},
+		"SK_Assessment1_Blob_connectionString": {
+			"value": ""
+		},
+		"SK_Assessment1_SQL_password": {
+			"value": ""
+		},
+		"cleaneData_connectionString": {
+			"value": ""
+		},
+		"roadDataAnalysisDB_password": {
+			"value": ""
+		},
+		"AzureSqlDatabase2_properties_typeProperties_server": {
+			"value": "n11915625iab353.database.windows.net"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_database": {
+			"value": "workshopDB"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_userName": {
+			"value": "User"
+		},
+		"AzureSqlDatabase3_properties_typeProperties_server": {
+			"value": "n11915625iab353.database.windows.net"
+		},
+		"AzureSqlDatabase3_properties_typeProperties_database": {
+			"value": "workshopDB"
+		},
+		"AzureSqlDatabase3_properties_typeProperties_userName": {
+			"value": "User"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_server": {
+			"value": "n11915625iab353.database.windows.net"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_database": {
+			"value": "workshopDB"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_userName": {
+			"value": "User"
+		},
+		"SK_Assessment1_SQL_properties_typeProperties_server": {
+			"value": "n11915625iab353.database.windows.net"
+		},
+		"SK_Assessment1_SQL_properties_typeProperties_database": {
+			"value": "workshopDB"
+		},
+		"SK_Assessment1_SQL_properties_typeProperties_userName": {
+			"value": "User"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_server": {
+			"value": "victoriadataanalysis.database.windows.net"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_database": {
+			"value": "roadDataAnalysis"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_userName": {
+			"value": "user"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

@@ -1,0 +1,223 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "SKIAB353DataFactoryWk5"
+		},
+		"AzureBlobStorageSK_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageSK'"
+		},
+		"AzureSqlDatabase2_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase2'"
+		},
+		"AzureSqlDatabase3_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase3'"
+		},
+		"AzureSqlDatabaseLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabaseLinkedService'"
+		},
+		"SK_Assessment1_Blob_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SK_Assessment1_Blob'"
+		},
+		"SK_Assessment1_SQL_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SK_Assessment1_SQL'"
+		},
+		"cleaneData_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'cleaneData'"
+		},
+		"roadDataAnalysisDB_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'roadDataAnalysisDB'"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "n11915625iab353.database.windows.net"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "workshopDB"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "User"
+		},
+		"AzureSqlDatabase3_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "n11915625iab353.database.windows.net"
+		},
+		"AzureSqlDatabase3_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "workshopDB"
+		},
+		"AzureSqlDatabase3_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "User"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "n11915625iab353.database.windows.net"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "workshopDB"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "User"
+		},
+		"SK_Assessment1_SQL_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "n11915625iab353.database.windows.net"
+		},
+		"SK_Assessment1_SQL_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "workshopDB"
+		},
+		"SK_Assessment1_SQL_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "User"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "victoriadataanalysis.database.windows.net"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "roadDataAnalysis"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "user"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "SKIAB353DataFactoryWk5_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorageSK_connectionString": {
+						"value": "[parameters('AzureBlobStorageSK_connectionString')]"
+					},
+					"AzureSqlDatabase2_password": {
+						"value": "[parameters('AzureSqlDatabase2_password')]"
+					},
+					"AzureSqlDatabase3_password": {
+						"value": "[parameters('AzureSqlDatabase3_password')]"
+					},
+					"AzureSqlDatabaseLinkedService_password": {
+						"value": "[parameters('AzureSqlDatabaseLinkedService_password')]"
+					},
+					"SK_Assessment1_Blob_connectionString": {
+						"value": "[parameters('SK_Assessment1_Blob_connectionString')]"
+					},
+					"SK_Assessment1_SQL_password": {
+						"value": "[parameters('SK_Assessment1_SQL_password')]"
+					},
+					"cleaneData_connectionString": {
+						"value": "[parameters('cleaneData_connectionString')]"
+					},
+					"roadDataAnalysisDB_password": {
+						"value": "[parameters('roadDataAnalysisDB_password')]"
+					},
+					"AzureSqlDatabase2_properties_typeProperties_server": {
+						"value": "[parameters('AzureSqlDatabase2_properties_typeProperties_server')]"
+					},
+					"AzureSqlDatabase2_properties_typeProperties_database": {
+						"value": "[parameters('AzureSqlDatabase2_properties_typeProperties_database')]"
+					},
+					"AzureSqlDatabase2_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSqlDatabase2_properties_typeProperties_userName')]"
+					},
+					"AzureSqlDatabase3_properties_typeProperties_server": {
+						"value": "[parameters('AzureSqlDatabase3_properties_typeProperties_server')]"
+					},
+					"AzureSqlDatabase3_properties_typeProperties_database": {
+						"value": "[parameters('AzureSqlDatabase3_properties_typeProperties_database')]"
+					},
+					"AzureSqlDatabase3_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSqlDatabase3_properties_typeProperties_userName')]"
+					},
+					"AzureSqlDatabaseLinkedService_properties_typeProperties_server": {
+						"value": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_server')]"
+					},
+					"AzureSqlDatabaseLinkedService_properties_typeProperties_database": {
+						"value": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_database')]"
+					},
+					"AzureSqlDatabaseLinkedService_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_userName')]"
+					},
+					"SK_Assessment1_SQL_properties_typeProperties_server": {
+						"value": "[parameters('SK_Assessment1_SQL_properties_typeProperties_server')]"
+					},
+					"SK_Assessment1_SQL_properties_typeProperties_database": {
+						"value": "[parameters('SK_Assessment1_SQL_properties_typeProperties_database')]"
+					},
+					"SK_Assessment1_SQL_properties_typeProperties_userName": {
+						"value": "[parameters('SK_Assessment1_SQL_properties_typeProperties_userName')]"
+					},
+					"roadDataAnalysisDB_properties_typeProperties_server": {
+						"value": "[parameters('roadDataAnalysisDB_properties_typeProperties_server')]"
+					},
+					"roadDataAnalysisDB_properties_typeProperties_database": {
+						"value": "[parameters('roadDataAnalysisDB_properties_typeProperties_database')]"
+					},
+					"roadDataAnalysisDB_properties_typeProperties_userName": {
+						"value": "[parameters('roadDataAnalysisDB_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "SKIAB353DataFactoryWk5_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'SKIAB353DataFactoryWk5_ArmTemplate_0')]"
+			]
+		}
+	]
+}

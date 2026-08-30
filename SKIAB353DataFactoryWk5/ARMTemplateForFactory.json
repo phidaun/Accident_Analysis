@@ -1,0 +1,2462 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "SKIAB353DataFactoryWk5"
+		},
+		"AzureBlobStorageSK_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageSK'"
+		},
+		"AzureSqlDatabase2_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase2'"
+		},
+		"AzureSqlDatabase3_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase3'"
+		},
+		"AzureSqlDatabaseLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabaseLinkedService'"
+		},
+		"SK_Assessment1_Blob_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SK_Assessment1_Blob'"
+		},
+		"SK_Assessment1_SQL_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SK_Assessment1_SQL'"
+		},
+		"cleaneData_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'cleaneData'"
+		},
+		"roadDataAnalysisDB_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'roadDataAnalysisDB'"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "n11915625iab353.database.windows.net"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "workshopDB"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "User"
+		},
+		"AzureSqlDatabase3_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "n11915625iab353.database.windows.net"
+		},
+		"AzureSqlDatabase3_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "workshopDB"
+		},
+		"AzureSqlDatabase3_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "User"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "n11915625iab353.database.windows.net"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "workshopDB"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "User"
+		},
+		"SK_Assessment1_SQL_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "n11915625iab353.database.windows.net"
+		},
+		"SK_Assessment1_SQL_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "workshopDB"
+		},
+		"SK_Assessment1_SQL_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "User"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "victoriadataanalysis.database.windows.net"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "roadDataAnalysis"
+		},
+		"roadDataAnalysisDB_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "user"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Casulties_By_Year_Speedzone')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "TransformAndCreateTable",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Fill_Severe_Crashes_By_Speed_Zone",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"cleanedAccidentData": {},
+									"SevereCrashesSink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Fill_Severe_Crashes_By_Speed_Zone')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Fill_roadAnalysis_Data')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Fill_Accident_Details",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Fill_Accident_Details",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"cleanedAccidnetData": {},
+									"AccidentDetails": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Fill_Accident_Outcome",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Fill_Accident_Details",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Fill_Accident_Outcome",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"cleanedAccidnetData": {},
+									"cleanedVehicleData": {},
+									"AccidentOutcome": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Fill_Vehicle_Details",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Fill_Accident_Details",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Fill_Vehicle_Details",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"cleanedVehicleData": {},
+									"VehicleDetails": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Fill_Vehicle_Outcomes",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Fill_Vehicle_Details",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Fill_Vehicle_Crash_Involvement",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"cleanedVehicleData": {},
+									"VehicleCrashInvolvement": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Fill_Accident_Details')]",
+				"[concat(variables('factoryId'), '/dataflows/Fill_Accident_Outcome')]",
+				"[concat(variables('factoryId'), '/dataflows/Fill_Vehicle_Details')]",
+				"[concat(variables('factoryId'), '/dataflows/Fill_Vehicle_Crash_Involvement')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/test')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "test",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Fill_Vehicle_Details",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"cleanedVehicleData": {},
+									"VehicleDetails": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Fill_Vehicle_Details')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AccidentDetails')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "roadDataAnalysisDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ACCIDENT_NO",
+						"type": "varchar"
+					},
+					{
+						"name": "ACCIDENT_DATETIME",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACCIDENT_TYPE_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "DCA_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "NO_OF_VEHICLES",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ROAD_GEOMETRY_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "SPEED_ZONE",
+						"type": "varchar"
+					},
+					{
+						"name": "RMA",
+						"type": "varchar"
+					},
+					{
+						"name": "LIGHT_CONDITION_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "POLICE_ATTEND_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "TIME_OF_DAY_BUCKET",
+						"type": "varchar"
+					},
+					{
+						"name": "YEAR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MONTH",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SEASON",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Accident_Details"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/roadDataAnalysisDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AccidentOutcome')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "roadDataAnalysisDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ACCIDENT_NO",
+						"type": "varchar"
+					},
+					{
+						"name": "NO_PERSONS",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NO_PERSONS_KILLED",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NO_PERSONS_INJ_2",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NO_PERSONS_INJ_3",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NO_PERSONS_NOT_INJ",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SEVERITY_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "NO_VEHICLES_TOWED",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NO_VEHICLES_CAUGHT_FIRE",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MAX_DAMAGE_LEVEL_DESC",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Accident_Outcome_Summary"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/roadDataAnalysisDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SK_AccidentCleaned')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SK_Assessment1_Blob",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "accident_cleaned.csv",
+						"container": "assessment1"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ACCIDENT_NO",
+						"type": "String"
+					},
+					{
+						"name": "ACCIDENT_TYPE_DESC",
+						"type": "String"
+					},
+					{
+						"name": "DCA_DESC",
+						"type": "String"
+					},
+					{
+						"name": "NO_OF_VEHICLES",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS_KILLED",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS_INJ_2",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS_INJ_3",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS_NOT_INJ",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS",
+						"type": "String"
+					},
+					{
+						"name": "ROAD_GEOMETRY_DESC",
+						"type": "String"
+					},
+					{
+						"name": "SPEED_ZONE",
+						"type": "String"
+					},
+					{
+						"name": "RMA",
+						"type": "String"
+					},
+					{
+						"name": "SEVERITY_DESC",
+						"type": "String"
+					},
+					{
+						"name": "LIGHT_CONDITION_DESC",
+						"type": "String"
+					},
+					{
+						"name": "POLICE_ATTEND_DESC",
+						"type": "String"
+					},
+					{
+						"name": "ACCIDENT_DATETIME",
+						"type": "String"
+					},
+					{
+						"name": "TIME_OF_DAY_BUCKET",
+						"type": "String"
+					},
+					{
+						"name": "YEAR",
+						"type": "String"
+					},
+					{
+						"name": "MONTH",
+						"type": "String"
+					},
+					{
+						"name": "SEASON",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SK_Assessment1_Blob')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SK_OlderVehicleSevereCrashes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SK_Assessment1_SQL",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ACCIDENT_YEAR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "VEHICLE_TYPE_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "OLDER_VEHICLE_COUNT",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Older_Vehicles_In_Severe_Crashes"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SK_Assessment1_SQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SK_VehicleCleaned')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SK_Assessment1_Blob",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "vehicle_cleaned.csv",
+						"container": "assessment1"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ACCIDENT_NO",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_ID",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_YEAR_MANUF",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_DCA_CODE",
+						"type": "String"
+					},
+					{
+						"name": "INITIAL_DIRECTION",
+						"type": "String"
+					},
+					{
+						"name": "ROAD_SURFACE_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "ROAD_SURFACE_TYPE_DESC",
+						"type": "String"
+					},
+					{
+						"name": "REG_STATE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_BODY_STYLE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_MAKE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_MODEL",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_TYPE_DESC",
+						"type": "String"
+					},
+					{
+						"name": "CONSTRUCTION_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "FUEL_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "NO_OF_WHEELS",
+						"type": "String"
+					},
+					{
+						"name": "NO_OF_CYLINDERS",
+						"type": "String"
+					},
+					{
+						"name": "SEATING_CAPACITY",
+						"type": "String"
+					},
+					{
+						"name": "TARE_WEIGHT",
+						"type": "String"
+					},
+					{
+						"name": "TOTAL_NO_OCCUPANTS",
+						"type": "String"
+					},
+					{
+						"name": "FINAL_DIRECTION",
+						"type": "String"
+					},
+					{
+						"name": "DRIVER_INTENT",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_MOVEMENT",
+						"type": "String"
+					},
+					{
+						"name": "TRAILER_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_COLOUR_1",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_COLOUR_2",
+						"type": "String"
+					},
+					{
+						"name": "CAUGHT_FIRE",
+						"type": "String"
+					},
+					{
+						"name": "INITIAL_IMPACT",
+						"type": "String"
+					},
+					{
+						"name": "LAMPS",
+						"type": "String"
+					},
+					{
+						"name": "LEVEL_OF_DAMAGE",
+						"type": "String"
+					},
+					{
+						"name": "TOWED_AWAY_FLAG",
+						"type": "String"
+					},
+					{
+						"name": "TRAFFIC_CONTROL",
+						"type": "String"
+					},
+					{
+						"name": "TRAFFIC_CONTROL_DESC",
+						"type": "String"
+					},
+					{
+						"name": "YEAR_QUALITY_STATUS",
+						"type": "String"
+					},
+					{
+						"name": "CAUGHT_FIRE_DESC",
+						"type": "String"
+					},
+					{
+						"name": "LEVEL_OF_DAMAGE_DESC",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SK_Assessment1_Blob')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SeverCrashCount')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "roadDataAnalysisDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SPEED_ZONE",
+						"type": "varchar"
+					},
+					{
+						"name": "ACCIDENT_YEAR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FATAL_CRASH_COUNT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "INJURY_CRASH_COUNT",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Severe_Crashes_By_Speed_Zone"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/roadDataAnalysisDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VehicleCrashInvolvement')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "roadDataAnalysisDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ACCIDENT_NO",
+						"type": "varchar"
+					},
+					{
+						"name": "VEHICLE_ID",
+						"type": "char"
+					},
+					{
+						"name": "VEHICLE_DCA_CODE",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "INITIAL_DIRECTION",
+						"type": "varchar"
+					},
+					{
+						"name": "FINAL_DIRECTION",
+						"type": "varchar"
+					},
+					{
+						"name": "DRIVER_INTENT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "VEHICLE_MOVEMENT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "INITIAL_IMPACT",
+						"type": "varchar"
+					},
+					{
+						"name": "LAMPS",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ROAD_SURFACE_TYPE_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "TRAFFIC_CONTROL_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "TOTAL_NO_OCCUPANTS",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CAUGHT_FIRE_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "LEVEL_OF_DAMAGE_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "TOWED_AWAY_FLAG",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Vehicle_Crash_Involvement"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/roadDataAnalysisDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VehicleDetails')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "roadDataAnalysisDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ACCIDENT_NO",
+						"type": "varchar"
+					},
+					{
+						"name": "VEHICLE_ID",
+						"type": "char"
+					},
+					{
+						"name": "VEHICLE_YEAR_MANUF",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "VEHICLE_MAKE",
+						"type": "varchar"
+					},
+					{
+						"name": "VEHICLE_MODEL",
+						"type": "varchar"
+					},
+					{
+						"name": "VEHICLE_BODY_STYLE",
+						"type": "varchar"
+					},
+					{
+						"name": "VEHICLE_TYPE",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "VEHICLE_TYPE_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "REG_STATE",
+						"type": "varchar"
+					},
+					{
+						"name": "FUEL_TYPE",
+						"type": "varchar"
+					},
+					{
+						"name": "CONSTRUCTION_TYPE",
+						"type": "varchar"
+					},
+					{
+						"name": "NO_OF_WHEELS",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NO_OF_CYLINDERS",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SEATING_CAPACITY",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TARE_WEIGHT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "VEHICLE_WEIGHT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CARRY_CAPACITY",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CUBIC_CAPACITY",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TRAILER_TYPE",
+						"type": "varchar"
+					},
+					{
+						"name": "VEHICLE_COLOUR_1",
+						"type": "varchar"
+					},
+					{
+						"name": "VEHICLE_COLOUR_2",
+						"type": "varchar"
+					},
+					{
+						"name": "YEAR_QUALITY_STATUS",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Vehicle_Characteristics"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/roadDataAnalysisDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/cleanedAccidentData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "cleaneData",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "accident_cleaned.csv",
+						"container": "cleaneddata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ACCIDENT_NO",
+						"type": "String"
+					},
+					{
+						"name": "ACCIDENT_TYPE_DESC",
+						"type": "String"
+					},
+					{
+						"name": "DCA_DESC",
+						"type": "String"
+					},
+					{
+						"name": "NO_OF_VEHICLES",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS_KILLED",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS_INJ_2",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS_INJ_3",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS_NOT_INJ",
+						"type": "String"
+					},
+					{
+						"name": "NO_PERSONS",
+						"type": "String"
+					},
+					{
+						"name": "ROAD_GEOMETRY_DESC",
+						"type": "String"
+					},
+					{
+						"name": "SPEED_ZONE",
+						"type": "String"
+					},
+					{
+						"name": "RMA",
+						"type": "String"
+					},
+					{
+						"name": "SEVERITY_DESC",
+						"type": "String"
+					},
+					{
+						"name": "LIGHT_CONDITION_DESC",
+						"type": "String"
+					},
+					{
+						"name": "POLICE_ATTEND_DESC",
+						"type": "String"
+					},
+					{
+						"name": "ACCIDENT_DATETIME",
+						"type": "String"
+					},
+					{
+						"name": "TIME_OF_DAY_BUCKET",
+						"type": "String"
+					},
+					{
+						"name": "YEAR",
+						"type": "String"
+					},
+					{
+						"name": "MONTH",
+						"type": "String"
+					},
+					{
+						"name": "SEASON",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/cleaneData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/cleanedVehicleData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "cleaneData",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "vehicle_cleaned.csv",
+						"container": "cleaneddata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ACCIDENT_NO",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_ID",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_YEAR_MANUF",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_DCA_CODE",
+						"type": "String"
+					},
+					{
+						"name": "INITIAL_DIRECTION",
+						"type": "String"
+					},
+					{
+						"name": "ROAD_SURFACE_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "ROAD_SURFACE_TYPE_DESC",
+						"type": "String"
+					},
+					{
+						"name": "REG_STATE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_BODY_STYLE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_MAKE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_MODEL",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_TYPE_DESC",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_WEIGHT",
+						"type": "String"
+					},
+					{
+						"name": "CONSTRUCTION_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "FUEL_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "NO_OF_WHEELS",
+						"type": "String"
+					},
+					{
+						"name": "NO_OF_CYLINDERS",
+						"type": "String"
+					},
+					{
+						"name": "SEATING_CAPACITY",
+						"type": "String"
+					},
+					{
+						"name": "TARE_WEIGHT",
+						"type": "String"
+					},
+					{
+						"name": "TOTAL_NO_OCCUPANTS",
+						"type": "String"
+					},
+					{
+						"name": "CARRY_CAPACITY",
+						"type": "String"
+					},
+					{
+						"name": "CUBIC_CAPACITY",
+						"type": "String"
+					},
+					{
+						"name": "FINAL_DIRECTION",
+						"type": "String"
+					},
+					{
+						"name": "DRIVER_INTENT",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_MOVEMENT",
+						"type": "String"
+					},
+					{
+						"name": "TRAILER_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_COLOUR_1",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_COLOUR_2",
+						"type": "String"
+					},
+					{
+						"name": "CAUGHT_FIRE",
+						"type": "String"
+					},
+					{
+						"name": "INITIAL_IMPACT",
+						"type": "String"
+					},
+					{
+						"name": "LAMPS",
+						"type": "String"
+					},
+					{
+						"name": "LEVEL_OF_DAMAGE",
+						"type": "String"
+					},
+					{
+						"name": "TOWED_AWAY_FLAG",
+						"type": "String"
+					},
+					{
+						"name": "TRAFFIC_CONTROL",
+						"type": "String"
+					},
+					{
+						"name": "TRAFFIC_CONTROL_DESC",
+						"type": "String"
+					},
+					{
+						"name": "YEAR_QUALITY_STATUS",
+						"type": "String"
+					},
+					{
+						"name": "YEAR_QUALITY STATUS",
+						"type": "String"
+					},
+					{
+						"name": "CAUGHT_FIRE_DESC",
+						"type": "String"
+					},
+					{
+						"name": "LEVEL_OF_DAMAGE_DESC",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/cleaneData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageSK')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorageSK_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabase2_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabase2_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabase2_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSqlDatabase2_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase3')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabase3_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabase3_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabase3_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSqlDatabase3_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabaseLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSqlDatabaseLinkedService_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SK_Assessment1_Blob')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('SK_Assessment1_Blob_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SK_Assessment1_SQL')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('SK_Assessment1_SQL_properties_typeProperties_server')]",
+					"database": "[parameters('SK_Assessment1_SQL_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('SK_Assessment1_SQL_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SK_Assessment1_SQL_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/cleaneData')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('cleaneData_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/roadDataAnalysisDB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('roadDataAnalysisDB_properties_typeProperties_server')]",
+					"database": "[parameters('roadDataAnalysisDB_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('roadDataAnalysisDB_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('roadDataAnalysisDB_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataFlowIR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 10,
+							"cleanup": false,
+							"customProperties": []
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_OlderVehiclesSevereCrashes')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SK_AccidentCleaned",
+								"type": "DatasetReference"
+							},
+							"name": "AccidentSource"
+						},
+						{
+							"dataset": {
+								"referenceName": "SK_VehicleCleaned",
+								"type": "DatasetReference"
+							},
+							"name": "VehicleSource"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "SK_OlderVehicleSevereCrashes",
+								"type": "DatasetReference"
+							},
+							"name": "OlderVehicleSevereSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectAccidentFields"
+						},
+						{
+							"name": "SelectVehicleFields"
+						},
+						{
+							"name": "JoinAccidentVehicle"
+						},
+						{
+							"name": "FilterValidManufactureYear"
+						},
+						{
+							"name": "DeriveVehicleAge"
+						},
+						{
+							"name": "FilterOlderSevereVehicles"
+						},
+						{
+							"name": "AggregateOlderVehicles"
+						},
+						{
+							"name": "FormatTable6Output"
+						},
+						{
+							"name": "SelectTable6Columns"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ACCIDENT_NO as string,",
+						"          ACCIDENT_TYPE_DESC as string,",
+						"          DCA_DESC as string,",
+						"          NO_OF_VEHICLES as string,",
+						"          NO_PERSONS_KILLED as string,",
+						"          NO_PERSONS_INJ_2 as string,",
+						"          NO_PERSONS_INJ_3 as string,",
+						"          NO_PERSONS_NOT_INJ as string,",
+						"          NO_PERSONS as string,",
+						"          ROAD_GEOMETRY_DESC as string,",
+						"          SPEED_ZONE as string,",
+						"          RMA as string,",
+						"          SEVERITY_DESC as string,",
+						"          LIGHT_CONDITION_DESC as string,",
+						"          POLICE_ATTEND_DESC as string,",
+						"          ACCIDENT_DATETIME as string,",
+						"          TIME_OF_DAY_BUCKET as string,",
+						"          YEAR as string,",
+						"          MONTH as string,",
+						"          SEASON as string",
+						"     ),",
+						"     allowSchemaDrift: false,",
+						"     validateSchema: true,",
+						"     ignoreNoFilesFound: false) ~> AccidentSource",
+						"source(output(",
+						"          ACCIDENT_NO as string,",
+						"          VEHICLE_ID as string,",
+						"          VEHICLE_YEAR_MANUF as string,",
+						"          VEHICLE_DCA_CODE as string,",
+						"          INITIAL_DIRECTION as string,",
+						"          ROAD_SURFACE_TYPE as string,",
+						"          ROAD_SURFACE_TYPE_DESC as string,",
+						"          REG_STATE as string,",
+						"          VEHICLE_BODY_STYLE as string,",
+						"          VEHICLE_MAKE as string,",
+						"          VEHICLE_MODEL as string,",
+						"          VEHICLE_TYPE as string,",
+						"          VEHICLE_TYPE_DESC as string,",
+						"          CONSTRUCTION_TYPE as string,",
+						"          FUEL_TYPE as string,",
+						"          NO_OF_WHEELS as string,",
+						"          NO_OF_CYLINDERS as string,",
+						"          SEATING_CAPACITY as string,",
+						"          TARE_WEIGHT as string,",
+						"          TOTAL_NO_OCCUPANTS as string,",
+						"          FINAL_DIRECTION as string,",
+						"          DRIVER_INTENT as string,",
+						"          VEHICLE_MOVEMENT as string,",
+						"          TRAILER_TYPE as string,",
+						"          VEHICLE_COLOUR_1 as string,",
+						"          VEHICLE_COLOUR_2 as string,",
+						"          CAUGHT_FIRE as string,",
+						"          INITIAL_IMPACT as string,",
+						"          LAMPS as string,",
+						"          LEVEL_OF_DAMAGE as string,",
+						"          TOWED_AWAY_FLAG as string,",
+						"          TRAFFIC_CONTROL as string,",
+						"          TRAFFIC_CONTROL_DESC as string,",
+						"          YEAR_QUALITY_STATUS as string,",
+						"          CAUGHT_FIRE_DESC as string,",
+						"          LEVEL_OF_DAMAGE_DESC as string",
+						"     ),",
+						"     allowSchemaDrift: false,",
+						"     validateSchema: true,",
+						"     ignoreNoFilesFound: false) ~> VehicleSource",
+						"AccidentSource select(mapColumn(",
+						"          ACCIDENT_NO,",
+						"          ACCIDENT_YEAR = YEAR,",
+						"          NO_PERSONS_KILLED,",
+						"          NO_PERSONS_INJ_2",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectAccidentFields",
+						"VehicleSource select(mapColumn(",
+						"          VEHICLE_ACCIDENT_NO = ACCIDENT_NO,",
+						"          VEHICLE_ID,",
+						"          VEHICLE_YEAR_MANUF,",
+						"          VEHICLE_TYPE_DESC,",
+						"          YEAR_QUALITY_STATUS",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehicleFields",
+						"SelectAccidentFields, SelectVehicleFields join(ACCIDENT_NO == VEHICLE_ACCIDENT_NO,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> JoinAccidentVehicle",
+						"JoinAccidentVehicle filter(YEAR_QUALITY_STATUS == 'Valid'\r",
+						"&& !isNull(VEHICLE_YEAR_MANUF)\r",
+						"&& !isNull(ACCIDENT_YEAR)\r",
+						"&& toInteger(VEHICLE_YEAR_MANUF) > 0\r",
+						"&& toInteger(VEHICLE_YEAR_MANUF) <= toInteger(ACCIDENT_YEAR)) ~> FilterValidManufactureYear",
+						"FilterValidManufactureYear derive(ACCIDENT_YEAR_INT = toInteger(ACCIDENT_YEAR),",
+						"          VEHICLE_YEAR_INT = toInteger(VEHICLE_YEAR_MANUF),",
+						"          KILLED_COUNT_INT = toInteger(NO_PERSONS_KILLED),",
+						"          SERIOUS_INJURY_COUNT_INT = toInteger(NO_PERSONS_INJ_2),",
+						"          VEHICLE_AGE = toInteger(ACCIDENT_YEAR) - toInteger(VEHICLE_YEAR_MANUF)) ~> DeriveVehicleAge",
+						"DeriveVehicleAge filter(VEHICLE_AGE >= 15\r",
+						"&& (\r",
+						"    KILLED_COUNT_INT > 0\r",
+						"    || SERIOUS_INJURY_COUNT_INT > 0\r",
+						")) ~> FilterOlderSevereVehicles",
+						"FilterOlderSevereVehicles aggregate(groupBy(ACCIDENT_YEAR_INT,",
+						"          VEHICLE_TYPE_DESC),",
+						"     OLDER_VEHICLE_COUNT = count()) ~> AggregateOlderVehicles",
+						"AggregateOlderVehicles derive(ACCIDENT_YEAR = toInteger(ACCIDENT_YEAR_INT),",
+						"          OLDER_VEHICLE_COUNT = toInteger(OLDER_VEHICLE_COUNT)) ~> FormatTable6Output",
+						"FormatTable6Output select(mapColumn(",
+						"          ACCIDENT_YEAR,",
+						"          VEHICLE_TYPE_DESC,",
+						"          OLDER_VEHICLE_COUNT",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectTable6Columns",
+						"SelectTable6Columns sink(allowSchemaDrift: false,",
+						"     validateSchema: true,",
+						"     input(",
+						"          ACCIDENT_YEAR as integer,",
+						"          VEHICLE_TYPE_DESC as string,",
+						"          OLDER_VEHICLE_COUNT as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> OlderVehicleSevereSink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SK_AccidentCleaned')]",
+				"[concat(variables('factoryId'), '/datasets/SK_VehicleCleaned')]",
+				"[concat(variables('factoryId'), '/datasets/SK_OlderVehicleSevereCrashes')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Fill_Accident_Details')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "cleanedAccidentData",
+								"type": "DatasetReference"
+							},
+							"name": "cleanedAccidnetData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "AccidentDetails",
+								"type": "DatasetReference"
+							},
+							"name": "AccidentDetails"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectAccidentDetails"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ACCIDENT_NO as string,",
+						"          ACCIDENT_TYPE_DESC as string,",
+						"          DCA_DESC as string,",
+						"          NO_OF_VEHICLES as string,",
+						"          NO_PERSONS_KILLED as string,",
+						"          NO_PERSONS_INJ_2 as string,",
+						"          NO_PERSONS_INJ_3 as string,",
+						"          NO_PERSONS_NOT_INJ as string,",
+						"          NO_PERSONS as string,",
+						"          ROAD_GEOMETRY_DESC as string,",
+						"          SPEED_ZONE as string,",
+						"          RMA as string,",
+						"          SEVERITY_DESC as string,",
+						"          LIGHT_CONDITION_DESC as string,",
+						"          POLICE_ATTEND_DESC as string,",
+						"          ACCIDENT_DATETIME as string,",
+						"          TIME_OF_DAY_BUCKET as string,",
+						"          YEAR as string,",
+						"          MONTH as string,",
+						"          SEASON as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> cleanedAccidnetData",
+						"cleanedAccidnetData select(mapColumn(",
+						"          ACCIDENT_NO,",
+						"          ACCIDENT_TYPE_DESC,",
+						"          DCA_DESC,",
+						"          NO_OF_VEHICLES,",
+						"          ROAD_GEOMETRY_DESC,",
+						"          SPEED_ZONE,",
+						"          RMA,",
+						"          LIGHT_CONDITION_DESC,",
+						"          POLICE_ATTEND_DESC,",
+						"          ACCIDENT_DATETIME,",
+						"          TIME_OF_DAY_BUCKET,",
+						"          YEAR,",
+						"          MONTH,",
+						"          SEASON",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectAccidentDetails",
+						"SelectAccidentDetails sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ACCIDENT_NO as string,",
+						"          ACCIDENT_DATETIME as timestamp,",
+						"          ACCIDENT_TYPE_DESC as string,",
+						"          DCA_DESC as string,",
+						"          NO_OF_VEHICLES as integer,",
+						"          ROAD_GEOMETRY_DESC as string,",
+						"          SPEED_ZONE as string,",
+						"          RMA as string,",
+						"          LIGHT_CONDITION_DESC as string,",
+						"          POLICE_ATTEND_DESC as string,",
+						"          TIME_OF_DAY_BUCKET as string,",
+						"          YEAR as integer,",
+						"          MONTH as integer,",
+						"          SEASON as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> AccidentDetails"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/cleanedAccidentData')]",
+				"[concat(variables('factoryId'), '/datasets/AccidentDetails')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Fill_Accident_Outcome')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "cleanedAccidentData",
+								"type": "DatasetReference"
+							},
+							"name": "cleanedAccidnetData"
+						},
+						{
+							"dataset": {
+								"referenceName": "cleanedVehicleData",
+								"type": "DatasetReference"
+							},
+							"name": "cleanedVehicleData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "AccidentOutcome",
+								"type": "DatasetReference"
+							},
+							"name": "AccidentOutcome"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectAccidentOutcome"
+						},
+						{
+							"name": "columnsToBeAggregated"
+						},
+						{
+							"name": "SortForLevelOfDamage"
+						},
+						{
+							"name": "aggregateColumns"
+						},
+						{
+							"name": "JoinAccidentOutcome"
+						},
+						{
+							"name": "deriveDataTypes"
+						},
+						{
+							"name": "FormatAccidentOutcome"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ACCIDENT_NO as string,",
+						"          ACCIDENT_TYPE_DESC as string,",
+						"          DCA_DESC as string,",
+						"          NO_OF_VEHICLES as string,",
+						"          NO_PERSONS_KILLED as string,",
+						"          NO_PERSONS_INJ_2 as string,",
+						"          NO_PERSONS_INJ_3 as string,",
+						"          NO_PERSONS_NOT_INJ as string,",
+						"          NO_PERSONS as string,",
+						"          ROAD_GEOMETRY_DESC as string,",
+						"          SPEED_ZONE as string,",
+						"          RMA as string,",
+						"          SEVERITY_DESC as string,",
+						"          LIGHT_CONDITION_DESC as string,",
+						"          POLICE_ATTEND_DESC as string,",
+						"          ACCIDENT_DATETIME as string,",
+						"          TIME_OF_DAY_BUCKET as string,",
+						"          YEAR as string,",
+						"          MONTH as string,",
+						"          SEASON as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> cleanedAccidnetData",
+						"source(output(",
+						"          ACCIDENT_NO as string,",
+						"          VEHICLE_ID as string,",
+						"          VEHICLE_YEAR_MANUF as string,",
+						"          VEHICLE_DCA_CODE as string,",
+						"          INITIAL_DIRECTION as string,",
+						"          ROAD_SURFACE_TYPE as string,",
+						"          ROAD_SURFACE_TYPE_DESC as string,",
+						"          REG_STATE as string,",
+						"          VEHICLE_BODY_STYLE as string,",
+						"          VEHICLE_MAKE as string,",
+						"          VEHICLE_MODEL as string,",
+						"          VEHICLE_TYPE as string,",
+						"          VEHICLE_TYPE_DESC as string,",
+						"          VEHICLE_WEIGHT as string,",
+						"          CONSTRUCTION_TYPE as string,",
+						"          FUEL_TYPE as string,",
+						"          NO_OF_WHEELS as string,",
+						"          NO_OF_CYLINDERS as string,",
+						"          SEATING_CAPACITY as string,",
+						"          TARE_WEIGHT as string,",
+						"          TOTAL_NO_OCCUPANTS as string,",
+						"          CARRY_CAPACITY as string,",
+						"          CUBIC_CAPACITY as string,",
+						"          FINAL_DIRECTION as string,",
+						"          DRIVER_INTENT as string,",
+						"          VEHICLE_MOVEMENT as string,",
+						"          TRAILER_TYPE as string,",
+						"          VEHICLE_COLOUR_1 as string,",
+						"          VEHICLE_COLOUR_2 as string,",
+						"          CAUGHT_FIRE as string,",
+						"          INITIAL_IMPACT as string,",
+						"          LAMPS as string,",
+						"          LEVEL_OF_DAMAGE as string,",
+						"          TOWED_AWAY_FLAG as string,",
+						"          TRAFFIC_CONTROL as string,",
+						"          TRAFFIC_CONTROL_DESC as string,",
+						"          YEAR_QUALITY_STATUS as string,",
+						"          {YEAR_QUALITY STATUS} as string,",
+						"          CAUGHT_FIRE_DESC as string,",
+						"          LEVEL_OF_DAMAGE_DESC as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> cleanedVehicleData",
+						"cleanedAccidnetData select(mapColumn(",
+						"          ACCIDENT_NO,",
+						"          NO_PERSONS_KILLED,",
+						"          NO_PERSONS_INJ_2,",
+						"          NO_PERSONS_INJ_3,",
+						"          NO_PERSONS_NOT_INJ,",
+						"          NO_PERSONS,",
+						"          SEVERITY_DESC",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectAccidentOutcome",
+						"cleanedVehicleData select(mapColumn(",
+						"          ACCIDENT_NO,",
+						"          CAUGHT_FIRE,",
+						"          LEVEL_OF_DAMAGE,",
+						"          TOWED_AWAY_FLAG,",
+						"          LEVEL_OF_DAMAGE_DESC",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> columnsToBeAggregated",
+						"columnsToBeAggregated sort(asc(ACCIDENT_NO, true),",
+						"     desc(toFloat(LEVEL_OF_DAMAGE), true)) ~> SortForLevelOfDamage",
+						"SortForLevelOfDamage aggregate(groupBy(ACCIDENT_NO),",
+						"     NO_VEHICLES_CAUGHT_FIRE = countIf(CAUGHT_FIRE == '1' || upper(CAUGHT_FIRE) == 'Y' || upper(CAUGHT_FIRE) == 'YES'),",
+						"          NO_VEHICLES_TOWED = countIf(TOWED_AWAY_FLAG == '1' || upper(TOWED_AWAY_FLAG) == 'Y' || upper(TOWED_AWAY_FLAG) == 'YES'),",
+						"          MAX_DAMAGE_LEVEL_DESC = first(LEVEL_OF_DAMAGE_DESC)) ~> aggregateColumns",
+						"SelectAccidentOutcome, aggregateColumns join(SelectAccidentOutcome@ACCIDENT_NO == aggregateColumns@ACCIDENT_NO,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> JoinAccidentOutcome",
+						"JoinAccidentOutcome derive(NO_PERSONS = toInteger(NO_PERSONS),",
+						"          NO_PERSONS_KILLED = toInteger(NO_PERSONS_KILLED),",
+						"          NO_PERSONS_INJ_2 = toInteger(NO_PERSONS_INJ_2),",
+						"          NO_PERSONS_INJ_3 = toInteger(NO_PERSONS_INJ_3),",
+						"          NO_PERSONS_NOT_INJ = toInteger(NO_PERSONS_NOT_INJ),",
+						"          NO_VEHICLES_TOWED = iifNull(NO_VEHICLES_TOWED, 0),",
+						"          NO_VEHICLES_CAUGHT_FIRE = iifNull(NO_VEHICLES_CAUGHT_FIRE, 0)) ~> deriveDataTypes",
+						"deriveDataTypes select(mapColumn(",
+						"          ACCIDENT_NO = SelectAccidentOutcome@ACCIDENT_NO,",
+						"          NO_PERSONS,",
+						"          NO_PERSONS_KILLED,",
+						"          NO_PERSONS_INJ_2,",
+						"          NO_PERSONS_INJ_3,",
+						"          NO_PERSONS_NOT_INJ,",
+						"          SEVERITY_DESC,",
+						"          NO_VEHICLES_TOWED,",
+						"          NO_VEHICLES_CAUGHT_FIRE,",
+						"          MAX_DAMAGE_LEVEL_DESC",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> FormatAccidentOutcome",
+						"FormatAccidentOutcome sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ACCIDENT_NO as string,",
+						"          NO_PERSONS as integer,",
+						"          NO_PERSONS_KILLED as integer,",
+						"          NO_PERSONS_INJ_2 as integer,",
+						"          NO_PERSONS_INJ_3 as integer,",
+						"          NO_PERSONS_NOT_INJ as integer,",
+						"          SEVERITY_DESC as string,",
+						"          NO_VEHICLES_TOWED as integer,",
+						"          NO_VEHICLES_CAUGHT_FIRE as integer,",
+						"          MAX_DAMAGE_LEVEL_DESC as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> AccidentOutcome"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/cleanedAccidentData')]",
+				"[concat(variables('factoryId'), '/datasets/cleanedVehicleData')]",
+				"[concat(variables('factoryId'), '/datasets/AccidentOutcome')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Fill_Severe_Crashes_By_Speed_Zone')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "cleanedAccidentData",
+								"type": "DatasetReference"
+							},
+							"name": "cleanedAccidentData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "SeverCrashCount",
+								"type": "DatasetReference"
+							},
+							"name": "SevereCrashesSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "CountCrashes"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ACCIDENT_NO as string,",
+						"          SPEED_ZONE as string,",
+						"          YEAR as string,",
+						"          NO_PERSONS_KILLED as string,",
+						"          NO_PERSONS_INJ_2 as string,",
+						"          SEVERITY_DESC as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> cleanedAccidentData",
+						"cleanedAccidentData aggregate(groupBy(SPEED_ZONE,",
+						"          ACCIDENT_YEAR = YEAR),",
+						"     CRASH_COUNT = countIf(toInteger(NO_PERSONS_KILLED) > 0 || toInteger(NO_PERSONS_INJ_2) > 0)) ~> CountCrashes",
+						"CountCrashes sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SPEED_ZONE as string,",
+						"          ACCIDENT_YEAR as integer,",
+						"          FATAL_CRASH_COUNT as integer,",
+						"          INJURY_CRASH_COUNT as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          SPEED_ZONE,",
+						"          ACCIDENT_YEAR,",
+						"          CRASH_COUNT",
+						"     )) ~> SevereCrashesSink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/cleanedAccidentData')]",
+				"[concat(variables('factoryId'), '/datasets/SeverCrashCount')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Fill_Vehicle_Crash_Involvement')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "cleanedVehicleData",
+								"type": "DatasetReference"
+							},
+							"name": "cleanedVehicleData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "VehicleCrashInvolvement",
+								"type": "DatasetReference"
+							},
+							"name": "VehicleCrashInvolvement"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectCrashInvolvement"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ACCIDENT_NO as string,",
+						"          VEHICLE_ID as string,",
+						"          VEHICLE_YEAR_MANUF as string,",
+						"          VEHICLE_DCA_CODE as string,",
+						"          INITIAL_DIRECTION as string,",
+						"          ROAD_SURFACE_TYPE as string,",
+						"          ROAD_SURFACE_TYPE_DESC as string,",
+						"          REG_STATE as string,",
+						"          VEHICLE_BODY_STYLE as string,",
+						"          VEHICLE_MAKE as string,",
+						"          VEHICLE_MODEL as string,",
+						"          VEHICLE_TYPE as string,",
+						"          VEHICLE_TYPE_DESC as string,",
+						"          VEHICLE_WEIGHT as string,",
+						"          CONSTRUCTION_TYPE as string,",
+						"          FUEL_TYPE as string,",
+						"          NO_OF_WHEELS as string,",
+						"          NO_OF_CYLINDERS as string,",
+						"          SEATING_CAPACITY as string,",
+						"          TARE_WEIGHT as string,",
+						"          TOTAL_NO_OCCUPANTS as string,",
+						"          CARRY_CAPACITY as string,",
+						"          CUBIC_CAPACITY as string,",
+						"          FINAL_DIRECTION as string,",
+						"          DRIVER_INTENT as string,",
+						"          VEHICLE_MOVEMENT as string,",
+						"          TRAILER_TYPE as string,",
+						"          VEHICLE_COLOUR_1 as string,",
+						"          VEHICLE_COLOUR_2 as string,",
+						"          CAUGHT_FIRE as string,",
+						"          INITIAL_IMPACT as string,",
+						"          LAMPS as string,",
+						"          LEVEL_OF_DAMAGE as string,",
+						"          TOWED_AWAY_FLAG as string,",
+						"          TRAFFIC_CONTROL as string,",
+						"          TRAFFIC_CONTROL_DESC as string,",
+						"          YEAR_QUALITY_STATUS as string,",
+						"          {YEAR_QUALITY STATUS} as string,",
+						"          CAUGHT_FIRE_DESC as string,",
+						"          LEVEL_OF_DAMAGE_DESC as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> cleanedVehicleData",
+						"cleanedVehicleData select(mapColumn(",
+						"          ACCIDENT_NO,",
+						"          VEHICLE_ID,",
+						"          VEHICLE_DCA_CODE,",
+						"          INITIAL_DIRECTION,",
+						"          FINAL_DIRECTION,",
+						"          DRIVER_INTENT,",
+						"          VEHICLE_MOVEMENT,",
+						"          INITIAL_IMPACT,",
+						"          LAMPS,",
+						"          ROAD_SURFACE_TYPE_DESC,",
+						"          TRAFFIC_CONTROL_DESC,",
+						"          TOTAL_NO_OCCUPANTS,",
+						"          CAUGHT_FIRE_DESC,",
+						"          LEVEL_OF_DAMAGE_DESC,",
+						"          TOWED_AWAY_FLAG",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectCrashInvolvement",
+						"SelectCrashInvolvement sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ACCIDENT_NO as string,",
+						"          VEHICLE_ID as string,",
+						"          VEHICLE_DCA_CODE as integer,",
+						"          INITIAL_DIRECTION as string,",
+						"          FINAL_DIRECTION as string,",
+						"          DRIVER_INTENT as integer,",
+						"          VEHICLE_MOVEMENT as integer,",
+						"          INITIAL_IMPACT as string,",
+						"          LAMPS as integer,",
+						"          ROAD_SURFACE_TYPE_DESC as string,",
+						"          TRAFFIC_CONTROL_DESC as string,",
+						"          TOTAL_NO_OCCUPANTS as integer,",
+						"          CAUGHT_FIRE_DESC as string,",
+						"          LEVEL_OF_DAMAGE_DESC as string,",
+						"          TOWED_AWAY_FLAG as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> VehicleCrashInvolvement"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/cleanedVehicleData')]",
+				"[concat(variables('factoryId'), '/datasets/VehicleCrashInvolvement')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Fill_Vehicle_Details')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "cleanedVehicleData",
+								"type": "DatasetReference"
+							},
+							"name": "cleanedVehicleData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "VehicleDetails",
+								"type": "DatasetReference"
+							},
+							"name": "VehicleDetails"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectVehicleDetails"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ACCIDENT_NO as string,",
+						"          VEHICLE_ID as string,",
+						"          VEHICLE_YEAR_MANUF as string,",
+						"          VEHICLE_DCA_CODE as string,",
+						"          INITIAL_DIRECTION as string,",
+						"          ROAD_SURFACE_TYPE as string,",
+						"          ROAD_SURFACE_TYPE_DESC as string,",
+						"          REG_STATE as string,",
+						"          VEHICLE_BODY_STYLE as string,",
+						"          VEHICLE_MAKE as string,",
+						"          VEHICLE_MODEL as string,",
+						"          VEHICLE_TYPE as string,",
+						"          VEHICLE_TYPE_DESC as string,",
+						"          VEHICLE_WEIGHT as string,",
+						"          CONSTRUCTION_TYPE as string,",
+						"          FUEL_TYPE as string,",
+						"          NO_OF_WHEELS as string,",
+						"          NO_OF_CYLINDERS as string,",
+						"          SEATING_CAPACITY as string,",
+						"          TARE_WEIGHT as string,",
+						"          TOTAL_NO_OCCUPANTS as string,",
+						"          CARRY_CAPACITY as string,",
+						"          CUBIC_CAPACITY as string,",
+						"          FINAL_DIRECTION as string,",
+						"          DRIVER_INTENT as string,",
+						"          VEHICLE_MOVEMENT as string,",
+						"          TRAILER_TYPE as string,",
+						"          VEHICLE_COLOUR_1 as string,",
+						"          VEHICLE_COLOUR_2 as string,",
+						"          CAUGHT_FIRE as string,",
+						"          INITIAL_IMPACT as string,",
+						"          LAMPS as string,",
+						"          LEVEL_OF_DAMAGE as string,",
+						"          TOWED_AWAY_FLAG as string,",
+						"          TRAFFIC_CONTROL as string,",
+						"          TRAFFIC_CONTROL_DESC as string,",
+						"          YEAR_QUALITY_STATUS as string,",
+						"          {YEAR_QUALITY STATUS} as string,",
+						"          CAUGHT_FIRE_DESC as string,",
+						"          LEVEL_OF_DAMAGE_DESC as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> cleanedVehicleData",
+						"cleanedVehicleData select(mapColumn(",
+						"          ACCIDENT_NO,",
+						"          VEHICLE_ID,",
+						"          VEHICLE_YEAR_MANUF,",
+						"          REG_STATE,",
+						"          VEHICLE_BODY_STYLE,",
+						"          VEHICLE_MAKE,",
+						"          VEHICLE_MODEL,",
+						"          VEHICLE_TYPE,",
+						"          VEHICLE_TYPE_DESC,",
+						"          VEHICLE_WEIGHT,",
+						"          CONSTRUCTION_TYPE,",
+						"          FUEL_TYPE,",
+						"          NO_OF_WHEELS,",
+						"          NO_OF_CYLINDERS,",
+						"          SEATING_CAPACITY,",
+						"          TARE_WEIGHT,",
+						"          CARRY_CAPACITY,",
+						"          CUBIC_CAPACITY,",
+						"          TRAILER_TYPE,",
+						"          VEHICLE_COLOUR_1,",
+						"          VEHICLE_COLOUR_2,",
+						"          YEAR_QUALITY_STATUS",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehicleDetails",
+						"SelectVehicleDetails sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ACCIDENT_NO as string,",
+						"          VEHICLE_ID as string,",
+						"          VEHICLE_YEAR_MANUF as integer,",
+						"          VEHICLE_MAKE as string,",
+						"          VEHICLE_MODEL as string,",
+						"          VEHICLE_BODY_STYLE as string,",
+						"          VEHICLE_TYPE as integer,",
+						"          VEHICLE_TYPE_DESC as string,",
+						"          REG_STATE as string,",
+						"          FUEL_TYPE as string,",
+						"          CONSTRUCTION_TYPE as string,",
+						"          NO_OF_WHEELS as integer,",
+						"          NO_OF_CYLINDERS as integer,",
+						"          SEATING_CAPACITY as integer,",
+						"          TARE_WEIGHT as integer,",
+						"          VEHICLE_WEIGHT as integer,",
+						"          CARRY_CAPACITY as integer,",
+						"          CUBIC_CAPACITY as integer,",
+						"          TRAILER_TYPE as string,",
+						"          VEHICLE_COLOUR_1 as string,",
+						"          VEHICLE_COLOUR_2 as string,",
+						"          YEAR_QUALITY_STATUS as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> VehicleDetails"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/cleanedVehicleData')]",
+				"[concat(variables('factoryId'), '/datasets/VehicleDetails')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_OlderVehiclesSevereCrashes')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "RunOlderVehiclesSevereCrashes",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_OlderVehiclesSevereCrashes",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"AccidentSource": {},
+									"VehicleSource": {},
+									"OlderVehicleSevereSink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_OlderVehiclesSevereCrashes')]"
+			]
+		}
+	]
+}
