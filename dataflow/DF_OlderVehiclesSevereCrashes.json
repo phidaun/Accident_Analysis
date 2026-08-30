@@ -29,6 +29,9 @@
 				},
 				{
 					"name": "JoinAccidentVehicle"
+				},
+				{
+					"name": "FilterValidManufactureYear"
 				}
 			],
 			"scriptLines": [
@@ -119,7 +122,12 @@
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> JoinAccidentVehicle"
+				"     broadcast: 'auto')~> JoinAccidentVehicle",
+				"JoinAccidentVehicle filter(YEAR_QUALITY_STATUS == 'Valid'\r",
+				"&& !isNull(VEHICLE_YEAR_MANUF)\r",
+				"&& !isNull(ACCIDENT_YEAR)\r",
+				"&& toInteger(VEHICLE_YEAR_MANUF) > 0\r",
+				"&& toInteger(VEHICLE_YEAR_MANUF) <= toInteger(ACCIDENT_YEAR)) ~> FilterValidManufactureYear"
 			]
 		}
 	}
