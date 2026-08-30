@@ -26,6 +26,9 @@
 				},
 				{
 					"name": "SelectVehicleFields"
+				},
+				{
+					"name": "JoinAccidentVehicle"
 				}
 			],
 			"scriptLines": [
@@ -111,7 +114,12 @@
 				"          YEAR_QUALITY_STATUS",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectVehicleFields"
+				"     skipDuplicateMapOutputs: true) ~> SelectVehicleFields",
+				"SelectAccidentFields, SelectVehicleFields join(ACCIDENT_NO == VEHICLE_ACCIDENT_NO,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> JoinAccidentVehicle"
 			]
 		}
 	}
