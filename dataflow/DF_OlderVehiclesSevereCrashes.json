@@ -35,6 +35,9 @@
 				},
 				{
 					"name": "DeriveVehicleAge"
+				},
+				{
+					"name": "FilterOlderSevereVehicles"
 				}
 			],
 			"scriptLines": [
@@ -135,7 +138,12 @@
 				"          VEHICLE_YEAR_INT = toInteger(VEHICLE_YEAR_MANUF),",
 				"          KILLED_COUNT_INT = toInteger(NO_PERSONS_KILLED),",
 				"          SERIOUS_INJURY_COUNT_INT = toInteger(NO_PERSONS_INJ_2),",
-				"          VEHICLE_AGE = toInteger(ACCIDENT_YEAR) - toInteger(VEHICLE_YEAR_MANUF)) ~> DeriveVehicleAge"
+				"          VEHICLE_AGE = toInteger(ACCIDENT_YEAR) - toInteger(VEHICLE_YEAR_MANUF)) ~> DeriveVehicleAge",
+				"DeriveVehicleAge filter(VEHICLE_AGE >= 15\r",
+				"&& (\r",
+				"    KILLED_COUNT_INT > 0\r",
+				"    || SERIOUS_INJURY_COUNT_INT > 0\r",
+				")) ~> FilterOlderSevereVehicles"
 			]
 		}
 	}
