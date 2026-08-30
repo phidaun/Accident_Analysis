@@ -41,6 +41,9 @@
 				},
 				{
 					"name": "AggregateOlderVehicles"
+				},
+				{
+					"name": "FormatTable6Output"
 				}
 			],
 			"scriptLines": [
@@ -149,7 +152,9 @@
 				")) ~> FilterOlderSevereVehicles",
 				"FilterOlderSevereVehicles aggregate(groupBy(ACCIDENT_YEAR_INT,",
 				"          VEHICLE_TYPE_DESC),",
-				"     OLDER_VEHICLE_COUNT = count()) ~> AggregateOlderVehicles"
+				"     OLDER_VEHICLE_COUNT = count()) ~> AggregateOlderVehicles",
+				"AggregateOlderVehicles derive(ACCIDENT_YEAR_INT = toInteger(ACCIDENT_YEAR_INT),",
+				"          OLDER_VEHICLE_COUNT = toInteger(OLDER_VEHICLE_COUNT)) ~> FormatTable6Output"
 			]
 		}
 	}
